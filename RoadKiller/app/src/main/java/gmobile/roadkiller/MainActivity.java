@@ -1,5 +1,6 @@
 package gmobile.roadkiller;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
@@ -11,6 +12,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PersistableBundle;
 import android.preference.PreferenceManager;
 import android.view.MotionEvent;
@@ -22,6 +24,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import gmobile.basegameutils.BaseGameActivity;
 
@@ -57,6 +61,27 @@ public class MainActivity extends BaseGameActivity {
     View ground1;
     View ground_over0;
     View ground_over1;
+    List<View> cars = new ArrayList<View>();
+    List<Float> cars_speeds = new ArrayList<Float>();
+    List<ImageView> cars_wheels = new ArrayList<ImageView>();
+    List<ImageView> rockets = new ArrayList<ImageView>();
+    List<ImageView> times = new ArrayList<ImageView>();
+    boolean game_paused;
+    AnimationDrawable anim_explode;
+    float speed;
+    float y_min;
+    float y_max;
+    int num_rockets;
+    ObjectAnimator anim;
+    boolean isForeground = true;
+
+    final float max_speed = 6f; // hero max speed
+    final float turn_speed = 3f; // hero turn speed
+    final int num_cars = 7; // number of cars on the road
+    final float car_bumper = 22; // center vertical point of car hit
+    final float hit_area = 5; // hit area
+    final int added_time = 10; // time to add when get gas
+    Handler h = new Handler();
 
     @Override
     protected void onCreate(Bundle b) {
@@ -123,21 +148,21 @@ public class MainActivity extends BaseGameActivity {
         for (int i = 0; i < num_cars; i++) {
             // rocket
             ImageView rocket = new ImageView(this);
-            rocket.setBackgroundResource(R.drawable.rocket);
+            rocket.setBackgroundResource(R.mipmap.rocket);
             rocket.setLayoutParams(new ActionBar.LayoutParams((int) DpToPx(24), (int) DpToPx(12)));
             ((ViewGroup) findViewById(R.id.game)).addView(rocket);
             rockets.add(rocket);
 
             // times
             ImageView time = new ImageView(this);
-            time.setBackgroundResource(R.drawable.time);
+            time.setBackgroundResource(R.mipmap.time);
             time.setLayoutParams(new ActionBar.LayoutParams((int) DpToPx(13), (int) DpToPx(16)));
             ((ViewGroup) findViewById(R.id.game)).addView(time);
             times.add(time);
 
             // car
             ImageView car = new ImageView(this);
-            car.setBackgroundResource(R.drawable.car);
+            car.setBackgroundResource(R.mipmap.car);
             car.setLayoutParams(new ActionBar.LayoutParams((int) DpToPx(60), (int) DpToPx(34)));
             ((ViewGroup) findViewById(R.id.game)).addView(car);
             cars.add(car);
@@ -145,14 +170,14 @@ public class MainActivity extends BaseGameActivity {
 
             // wheel 1
             ImageView wheel = new ImageView(this);
-            wheel.setBackgroundResource(R.drawable.wheel_car);
+            wheel.setBackgroundResource(R.mipmap.wheel_car);
             wheel.setLayoutParams(new ActionBar.LayoutParams((int) DpToPx(16), (int) DpToPx(16)));
             ((ViewGroup) findViewById(R.id.game)).addView(wheel);
             cars_wheels.add(wheel);
 
             // wheel 2
             wheel = new ImageView(this);
-            wheel.setBackgroundResource(R.drawable.wheel_car);
+            wheel.setBackgroundResource(R.mipmap.wheel_car);
             wheel.setLayoutParams(new ActionBar.LayoutParams((int) DpToPx(16), (int) DpToPx(16)));
             ((ViewGroup) findViewById(R.id.game)).addView(wheel);
             cars_wheels.add(wheel);
@@ -225,10 +250,19 @@ public class MainActivity extends BaseGameActivity {
             }
         });
 
-
-
-
     }
+
+
+    // DpToPx
+    float DpToPx(float dp) {
+        return (dp * Math.max(getResources().getDisplayMetrics().widthPixels, getResources().getDisplayMetrics().heightPixels) / 540f);
+    }
+
+
+
+    private void hide_navigation_bar() {
+    }
+
 
     @Override
     public void onSignInSucceeded() {
