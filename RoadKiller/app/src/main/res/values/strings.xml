@@ -1,3 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">RoadKiller</string>
+
+    <string name="app_name">Road Killer</string> <!-- App name -->
+
+    <item name="show_admob" type="bool">false</item> <!-- Show AdMob (true/false) -->
+
+    <item name="admob_test" type="bool">false</item> <!-- AdMob test mode (true/false) -->
+
+
+    <string name="adMob_interstitial"></string> <!-- AdMob Interstitial ID -->
+
+    <string name="app_id"></string> <!-- Google Play Games App ID -->
+
+    <string name="leaderboard"></string> <!-- Google Play Games Leaderboard ID -->
+
+    <string name="btn_leaderboard">LEADERBOARD</string>
+    <string name="btn_start">PLAY</string>
+    <string name="btn_start2">PLAY AGAIN</string>
+    <string name="btn_exit">QUIT</string>
+    <string name="btn_home">HOME</string>
+    <string name="btn_sound">SOUND</string>
+    <string name="btn_mute">MUTE</string>
+    <string name="btn_sign_in">Google+ sign in</string>
+    <string name="btn_sign_out">Google+ sign out</string>
+    <string name="score">Score:</string>
+    <string name="time">Time:</string>
+    <string name="rockets">Rockets:</string>
+    <string name="high_score">Your High Score:</string>
+    <string name="game_over">GAME OVER</string>
+    <string name="time_up">TIME IS UP</string>
+
 </resources>
